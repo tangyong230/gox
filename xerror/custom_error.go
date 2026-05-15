@@ -7,6 +7,11 @@ package xerror
 
 import "github.com/tangyong230/gox/i18n"
 
+const (
+	ErrConf = 1001
+)
+
+
 type CustomError struct {
 	ErrNo  int
 	ErrKey string
