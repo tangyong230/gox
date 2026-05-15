@@ -12,16 +12,18 @@ type I18nManager struct {
 	mu          sync.RWMutex
 	messages    map[string]map[string]string // lang -> key -> message
 	defaultLang string
+	defaultDir string
 }
 
 var defaultManager *I18nManager
 var once sync.Once
 
-func InitI18n(defaultLang string) error {
+func InitI18n(defaultLang, defaultDir string) error {
 	var err error
 	once.Do(func() {
 		defaultManager = &I18nManager{
 			defaultLang: defaultLang,
+			defaultDir:  defaultDir,
 			messages:    make(map[string]map[string]string),
 		}
 		err = defaultManager.loadAllLocales()
@@ -30,7 +32,7 @@ func InitI18n(defaultLang string) error {
 }
 
 func (m *I18nManager) loadAllLocales() error {
-	localeDir := "locales"
+	localeDir := m.defaultDir
 	files, err := os.ReadDir(localeDir)
 	if err != nil {
 		return fmt.Errorf("failed to read locale directory: %w", err)
